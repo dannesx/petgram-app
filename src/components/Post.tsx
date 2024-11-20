@@ -1,7 +1,7 @@
 import { Heart, MessageSquare, MessageSquarePlus } from "lucide-react"
-import { Link } from "react-router-dom"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
+import PostDialog from "./PostDialog"
 
 const Post = () => {
   return (
@@ -12,31 +12,34 @@ const Post = () => {
         className="rounded aspect-square object-cover"
       />
 
-      <div className="flex gap-3 text-primary">
-        <div className="flex gap-1">
-          <Heart className="h-6 w-6" />
-          <span className="font-medium tracking-tight">376</span>
+      <div className="flex justify-between items-center">
+        <div className="flex gap-3 text-primary">
+          <div className="flex gap-1">
+            <Heart className="h-6 w-6" />
+            <span className="font-medium tracking-tight">376</span>
+          </div>
+          <div className="flex gap-1">
+            <MessageSquare className="h-6 w-6" />
+            <span className="font-medium tracking-tight">53</span>
+          </div>
         </div>
-        <div className="flex gap-1">
-          <MessageSquare className="h-6 w-6" />
-          <span className="font-medium tracking-tight">53</span>
-        </div>
+
+        <p className="text-xs text-muted-foreground font-medium">há 47 min</p>
       </div>
 
       <p>
         <span className="text-primary font-bold tracking-tight">
           paw_prince
         </span>{" "}
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum, ipsam.
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum, ipsam.{" "}
       </p>
-
-      <Link to="#" className="font-bold text-primary text-sm">
-        Ver todos os comentários
-      </Link>
+      <Button variant="link" className="p-0 h-auto">
+        <PostDialog />
+      </Button>
 
       <form className="flex items-center space-x-2">
         <Input type="text" placeholder="Adicionar comentário" />
-        <Button size="icon">
+        <Button size="icon" className="flex-shrink-0">
           <MessageSquarePlus />
         </Button>
       </form>
