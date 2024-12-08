@@ -1,6 +1,3 @@
-import { Separator } from "./ui/separator"
-import UserSuggestion from "./UserSuggestion"
-
 const Trendings = () => {
   return (
     <div className="border rounded-lg w-full p-5">
@@ -23,15 +20,6 @@ const Trendings = () => {
           #cats
         </li>
       </ol>
-
-      <Separator className="my-4" />
-
-      <h2 className="tracking-tight font-medium mb-4">Sugestões para você</h2>
-      <ul className="space-y-4">
-        <UserSuggestion username="paw_prince" />
-        <UserSuggestion username="meowtastic" />
-        <UserSuggestion username="bunny_hops" />
-      </ul>
     </div>
   )
 }

@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
+import NewPostDialog from "./NewPostDialog"
 
 const Header = () => {
   return (
@@ -59,7 +60,9 @@ const Header = () => {
         </div>
       </div>
 
-      <div>
+      <div className="flex gap-2">
+        <NewPostDialog />
+
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
