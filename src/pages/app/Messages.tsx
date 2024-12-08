@@ -21,7 +21,7 @@ const Messages = () => {
     <>
       <Helmet title="Mensagens" />
 
-      <section className="grid grid-cols-4 col-span-3 h-[calc(100vh-120px)] gap-8">
+      <section className="grid grid-cols-4 col-span-3 h-[calc(100vh-120px)] gap-5">
         <div className="border rounded-lg">
           <ul>
             {["bunny_hops", "admin", "john_doe", "alice"].map((user) => (
