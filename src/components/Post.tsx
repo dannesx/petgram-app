@@ -2,6 +2,7 @@ import { Heart, MessageSquare, MessageSquarePlus } from "lucide-react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import PostDialog from "./PostDialog"
+import PostActions from "./PostActions"
 
 const Post = () => {
   return (
@@ -24,7 +25,7 @@ const Post = () => {
           </div>
         </div>
 
-        <p className="text-xs text-muted-foreground font-medium">há 47 min</p>
+        <PostActions />
       </div>
 
       <p>
@@ -32,6 +33,7 @@ const Post = () => {
           paw_prince
         </span>{" "}
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum, ipsam.{" "}
+        <p className="text-xs text-muted-foreground font-medium">há 47 min</p>
       </p>
       <Button variant="link" className="p-0 h-auto">
         <PostDialog />
