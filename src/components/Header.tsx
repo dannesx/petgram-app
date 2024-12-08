@@ -18,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 import NewPostDialog from "./NewPostDialog"
+import SettingsDialog from "./SettingsDialog"
+import { Dialog, DialogTrigger } from "./ui/dialog"
 
 const Header = () => {
   return (
@@ -63,42 +65,45 @@ const Header = () => {
       <div className="flex gap-2">
         <NewPostDialog />
 
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage />
-              <AvatarFallback className="bg-primary text-primary-foreground select-none">
-                DA
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar>
+                <AvatarImage />
+                <AvatarFallback className="bg-primary text-primary-foreground select-none">
+                  DA
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end" className="w-[230px]">
-            <DropdownMenuLabel>
-              <p>dannesx</p>
-              <p className="text-muted-foreground font-light">
-                daniel@email.com
-              </p>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/settings" className="cursor-pointer">
-                <Settings className="h-5 w-5" />
-                <span>Configurações</span>
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuContent align="end" className="w-[230px]">
+              <DropdownMenuLabel>
+                <p>dannesx</p>
+                <p className="text-muted-foreground font-light">
+                  daniel@email.com
+                </p>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <DialogTrigger className="flex gap-2">
+                  <Settings className="h-5 w-5" />
+                  <span>Configurações</span>
+                </DialogTrigger>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link
-                to="/login"
-                className="text-red-500 dark:text-red-400 cursor-pointer"
-              >
-                <LogOut className="h-5 w-5" />
-                <span>Sair</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/login"
+                  className="text-red-500 dark:text-red-400 cursor-pointer"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Sair</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <SettingsDialog />
+        </Dialog>
       </div>
     </header>
   )

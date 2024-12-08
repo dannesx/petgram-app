@@ -1,12 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import { AppLayout, AuthLayout } from "./pages/_layouts"
 import { LoginPage, RegisterPage } from "./pages/auth"
-import {
-  SettingsPage,
-  HomePage,
-  MessagesPage,
-  NotificationsPage,
-} from "./pages/app"
+import { HomePage, MessagesPage, NotificationsPage } from "./pages/app"
 
 const router = createBrowserRouter([
   {
@@ -24,10 +19,6 @@ const router = createBrowserRouter([
       {
         path: "/notifications",
         element: <NotificationsPage />,
-      },
-      {
-        path: "/settings",
-        element: <SettingsPage />,
       },
     ],
   },

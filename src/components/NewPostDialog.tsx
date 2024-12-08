@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react"
+import { PawPrint, Plus } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -39,7 +39,10 @@ const NewPostDialog = () => {
           </Label>
           <Textarea className="resize-none col-span-3" id="caption"></Textarea>
 
-          <Button className="col-start-2 col-span-3">Publicar</Button>
+          <Button className="col-start-2 col-span-3">
+            <PawPrint />
+            Publicar
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
