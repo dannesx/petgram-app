@@ -1,30 +1,60 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RegisterSchema } from "@/schemas/RegisterSchema"
+import { RegisterSchemaType } from "@/schemas/RegisterSchema"
 import { Helmet } from "react-helmet-async"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { RegisterSchema } from "@/schemas/RegisterSchema"
 import { register as registerApi } from "@/api/auth/register"
 import { toast } from "sonner"
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { AxiosError } from "axios"
+
 const Register = () => {
   const navigate = useNavigate()
-  const { register, handleSubmit } = useForm<RegisterSchema>()
+  const form = useForm<RegisterSchemaType>({
+    resolver: zodResolver(RegisterSchema),
+  })
 
-  async function handleRegister(data: RegisterSchema) {
+  const handleAxiosError = (error: AxiosError) => {
+    let errorMessage = "Ocorreu um erro. Tente novamente"
+    if (error.response) {
+      switch (error.response.status) {
+        case 409:
+          errorMessage =
+            "Usuário já cadastrado. Tente outro nome de usuário e/ou email"
+          break
+      }
+    }
+    toast.error(errorMessage)
+  }
+
+  async function handleRegister(data: RegisterSchemaType) {
     try {
       await registerApi(data)
       toast.success("Usuário cadastrado com sucesso!", {
         action: {
           label: "Fazer login",
-          onClick: () => navigate("/login")
-        }
+          onClick: () => navigate("/login"),
+        },
       })
     } catch (error) {
-      toast.error("Deu ruim")
+      console.error(error)
+      if (error instanceof AxiosError) {
+        handleAxiosError(error)
+      }
     }
   }
+
   return (
     <>
       <Helmet title="Registrar" />
@@ -33,53 +63,82 @@ const Register = () => {
           Cadastro
         </h1>
 
-        <form
-          className="w-[300px] space-y-3"
-          onSubmit={handleSubmit(handleRegister)}
-        >
-          <div className="space-y-1">
-            <Label htmlFor="username">Usuário</Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="exemplo123"
-              {...register("username")}
+        <Form {...form}>
+          <form
+            className="w-[300px] space-y-2"
+            onSubmit={form.handleSubmit(handleRegister)}
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Usuário</FormLabel>
+                  <FormControl>
+                    <Input placeholder="exemplo123" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="exemplo@email.com"
-              {...register("email")}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="exemplo@email.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              {...register("password")}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <Button type="submit" className="w-full">
-            Nova conta
-          </Button>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirme sua senha</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <p className="text-sm text-muted-foreground text-center">
-            Já tem uma conta?{" "}
-            <Link to="/login" className="text-primary font-medium">
-              Entrar
-            </Link>
-          </p>
-        </form>
+            <Button type="submit" className="w-full">
+              Nova conta
+            </Button>
+
+            <p className="text-sm text-muted-foreground text-center">
+              Já tem uma conta?{" "}
+              <Link to="/login" className="text-primary font-medium">
+                Entrar
+              </Link>
+            </p>
+          </form>
+        </Form>
       </div>
     </>
   )
 }
+
 export default Register
