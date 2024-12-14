@@ -1,10 +1,30 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { RegisterSchema } from "@/schemas/RegisterSchema"
 import { Helmet } from "react-helmet-async"
-import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { Link, useNavigate } from "react-router-dom"
+import { register as registerApi } from "@/api/auth/register"
+import { toast } from "sonner"
 
 const Register = () => {
+  const navigate = useNavigate()
+  const { register, handleSubmit } = useForm<RegisterSchema>()
+
+  async function handleRegister(data: RegisterSchema) {
+    try {
+      await registerApi(data)
+      toast.success("Usuário cadastrado com sucesso!", {
+        action: {
+          label: "Fazer login",
+          onClick: () => navigate("/login")
+        }
+      })
+    } catch (error) {
+      toast.error("Deu ruim")
+    }
+  }
   return (
     <>
       <Helmet title="Registrar" />
@@ -13,15 +33,28 @@ const Register = () => {
           Cadastro
         </h1>
 
-        <form className="w-[300px] space-y-3">
+        <form
+          className="w-[300px] space-y-3"
+          onSubmit={handleSubmit(handleRegister)}
+        >
           <div className="space-y-1">
             <Label htmlFor="username">Usuário</Label>
-            <Input id="username" type="text" placeholder="exemplo123" />
+            <Input
+              id="username"
+              type="text"
+              placeholder="exemplo123"
+              {...register("username")}
+            />
           </div>
 
           <div className="space-y-1">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="exemplo@email.com" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="exemplo@email.com"
+              {...register("email")}
+            />
           </div>
 
           <div className="space-y-1">
@@ -30,6 +63,7 @@ const Register = () => {
               id="password"
               type="password"
               placeholder="••••••••"
+              {...register("password")}
             />
           </div>
 

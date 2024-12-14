@@ -1,8 +1,16 @@
+import { getPosts } from "@/api/posts/getPosts"
 import Post from "@/components/Post"
 import Trendings from "@/components/Trendings"
+import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 
 const Home = () => {
+  useEffect(() => {
+    async function fetchPosts(){
+      await getPosts()
+    }
+    fetchPosts()
+  }, [])
   return (
     <>
       <Helmet title="Home" />

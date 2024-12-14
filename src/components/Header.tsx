@@ -6,7 +6,7 @@ import {
   PawPrint,
   Settings,
 } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Separator } from "./ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import {
@@ -22,6 +22,15 @@ import SettingsDialog from "./SettingsDialog"
 import { Dialog, DialogTrigger } from "./ui/dialog"
 
 const Header = () => {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    if (localStorage.getItem("token")) {
+      localStorage.removeItem("token")
+    }
+
+    navigate("/login", { replace: true })
+  }
   return (
     <header className="flex justify-between py-4 mb-2">
       <div className="flex gap-4 items-center">
@@ -91,14 +100,12 @@ const Header = () => {
                 </DialogTrigger>
               </DropdownMenuItem>
 
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/login"
-                  className="text-red-500 dark:text-red-400 cursor-pointer"
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Sair</span>
-                </Link>
+              <DropdownMenuItem
+                className="text-red-500 dark:text-red-400 cursor-pointer"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-5 w-5" />
+                <span>Sair</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
