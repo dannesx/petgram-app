@@ -3,6 +3,7 @@ import { LoginSchemaType } from "@/schemas/LoginSchema"
 
 export async function login(data: LoginSchemaType): Promise<void> {
   const result = await api.post("/auth", data)
+  localStorage.removeItem("token")
 
   if (result.data?.token) {
     localStorage.setItem("token", result.data.token)

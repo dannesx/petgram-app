@@ -3,13 +3,37 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import PostDialog from "./PostDialog"
 import PostActions from "./PostActions"
+import PostInterface from "@/types/Post"
+import { Form, FormControl, FormField, FormItem } from "./ui/form"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CommentSchema, CommentSchemaType } from "@/schemas/CommentSchema"
+import { toast } from "sonner"
+import { createComment } from "@/api/comments/createComment"
 
-const Post = () => {
+type Props = {
+  data: PostInterface
+}
+
+const Post = ({ data: post }: Props) => {
+  const form = useForm<CommentSchemaType>({
+    resolver: zodResolver(CommentSchema),
+  })
+
+  async function handleComment(data: CommentSchemaType) {
+    try {
+      await createComment(data, post.id)
+      toast.success("Comentário feito com sucesso!")
+    } catch (error) {
+      console.error(error)
+      toast.error("Erro ao comentar no post")
+    }
+  }
   return (
     <div className="col-start-2 col-span-2 space-y-2">
       <img
-        src="https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
+        src={post.imageUrl}
+        alt={post.caption}
         className="rounded aspect-square object-cover"
       />
 
@@ -17,11 +41,13 @@ const Post = () => {
         <div className="flex gap-3 text-primary">
           <div className="flex gap-1">
             <Heart className="h-6 w-6" />
-            <span className="font-medium tracking-tight">376</span>
+            <span className="font-medium tracking-tight">{post.likeCount}</span>
           </div>
           <div className="flex gap-1">
             <MessageSquare className="h-6 w-6" />
-            <span className="font-medium tracking-tight">53</span>
+            <span className="font-medium tracking-tight">
+              {post.comments.length}
+            </span>
           </div>
         </div>
 
@@ -30,21 +56,37 @@ const Post = () => {
 
       <p>
         <span className="text-primary font-bold tracking-tight">
-          paw_prince
+          {post.user.username}
         </span>{" "}
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum, ipsam.{" "}
+        {post.caption}{" "}
         <p className="text-xs text-muted-foreground font-medium">há 47 min</p>
       </p>
       <Button variant="link" className="p-0 h-auto">
-        <PostDialog />
+        <PostDialog data={post} />
       </Button>
 
-      <form className="flex items-center space-x-2">
-        <Input type="text" placeholder="Adicionar comentário" />
-        <Button size="icon" className="flex-shrink-0">
-          <MessageSquarePlus />
-        </Button>
-      </form>
+      <Form {...form}>
+        <form
+          className="flex items-center space-x-2"
+          onSubmit={form.handleSubmit(handleComment)}
+        >
+          <FormField
+            control={form.control}
+            name="text"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormControl>
+                  <Input placeholder="Adicionar comentário" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <Button size="icon" className="flex-shrink-0">
+            <MessageSquarePlus />
+          </Button>
+        </form>
+      </Form>
     </div>
   )
 }
