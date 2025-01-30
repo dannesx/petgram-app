@@ -1,13 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { RegisterSchemaType } from "@/schemas/RegisterSchema"
 import { Helmet } from "react-helmet-async"
-import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { RegisterSchema } from "@/schemas/RegisterSchema"
-import { register as registerApi } from "@/api/auth/register"
-import { toast } from "sonner"
+import { Link } from "react-router-dom"
 
 import {
   Form,
@@ -17,44 +11,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { AxiosError } from "axios"
+import { useForm } from "react-hook-form"
 
 const Register = () => {
-  const navigate = useNavigate()
-  const form = useForm<RegisterSchemaType>({
-    resolver: zodResolver(RegisterSchema),
-  })
-
-  const handleAxiosError = (error: AxiosError) => {
-    let errorMessage = "Ocorreu um erro. Tente novamente"
-    if (error.response) {
-      switch (error.response.status) {
-        case 409:
-          errorMessage =
-            "Usuário já cadastrado. Tente outro nome de usuário e/ou email"
-          break
-      }
-    }
-    toast.error(errorMessage)
-  }
-
-  async function handleRegister(data: RegisterSchemaType) {
-    try {
-      await registerApi(data)
-      toast.success("Usuário cadastrado com sucesso!", {
-        action: {
-          label: "Fazer login",
-          onClick: () => navigate("/login"),
-        },
-      })
-    } catch (error) {
-      console.error(error)
-      if (error instanceof AxiosError) {
-        handleAxiosError(error)
-      }
-    }
-  }
-
+  const form = useForm()
   return (
     <>
       <Helmet title="Registrar" />
@@ -64,10 +24,7 @@ const Register = () => {
         </h1>
 
         <Form {...form}>
-          <form
-            className="w-[300px] space-y-2"
-            onSubmit={form.handleSubmit(handleRegister)}
-          >
+          <form className="w-[300px] space-y-2">
             <FormField
               control={form.control}
               name="username"
@@ -111,7 +68,6 @@ const Register = () => {
             />
 
             <FormField
-              control={form.control}
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
