@@ -12,9 +12,34 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
+import { RegisterSchema, RegisterType } from "@/schemas/RegisterSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useCreateUser } from "@/api/users/create-user"
+import { toast } from "sonner"
 
 const Register = () => {
-  const form = useForm()
+  const form = useForm<RegisterType>({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    },
+    resolver: zodResolver(RegisterSchema)
+  })
+
+  const { mutateAsync: createUserFn } = useCreateUser()
+
+  async function onSubmit(data: RegisterType){
+    try {
+      await createUserFn(data)
+      toast.success("Conta criada com sucesso!")
+    } catch (error) {
+      toast.error("Erro ao criar usuário")
+      console.error(error)
+    }
+  }
+
   return (
     <>
       <Helmet title="Registrar" />
@@ -24,7 +49,7 @@ const Register = () => {
         </h1>
 
         <Form {...form}>
-          <form className="w-[300px] space-y-2">
+          <form className="w-[300px] space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="username"
