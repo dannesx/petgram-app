@@ -52,7 +52,11 @@ const PostDialog = ({ postId }: Props) => {
 
             <ul className="space-y-2 h-[350px] overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
               {post?.comments.map((comment) => (
-                <Comment key={comment.id} username={comment.user.username}>
+                <Comment
+                  key={comment.id}
+                  username={comment.user.username}
+                  createdAt={comment.createdAt}
+                >
                   {comment.text}
                 </Comment>
               ))}

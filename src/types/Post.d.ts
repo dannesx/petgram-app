@@ -14,6 +14,7 @@ export interface Post {
       id: string
       username: string
     }
-    text: string
+    text: string,
+    createdAt: string
   }[]
 }
